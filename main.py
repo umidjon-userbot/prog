@@ -140,8 +140,8 @@ async def update_restart(_, message):
 @app.on_message(
     filters.command("pause")
     & ~filters.private
-    & (filters.user(SUDOERS) | filters.chat(SUDO_CHAT_ID))
-)
+    & (filters.user(SUDOERS))
+
 async def pause_song(_, message):
     vc = call[str(message.chat.id)]
     vc.pause_playout()
@@ -153,8 +153,8 @@ async def pause_song(_, message):
 @app.on_message(
     filters.command("resume")
     & ~filters.private
-    & (filters.user(SUDOERS) | filters.chat(SUDO_CHAT_ID))
-)
+    & (filters.user(SUDOERS))
+
 async def resume_song(_, message):
     vc = call[str(message.chat.id)]
     vc.resume_playout()
@@ -166,8 +166,7 @@ async def resume_song(_, message):
 @app.on_message(
     filters.command("volume")
     & ~filters.private
-    & (filters.user(SUDOERS) | filters.chat(SUDO_CHAT_ID))
-)
+    & (filters.user(SUDOERS))
 async def volume_bot(_, message):
     vc = call[str(message.chat.id)]
     usage = "**Usage:**\n/volume [1-200]"
