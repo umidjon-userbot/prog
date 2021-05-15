@@ -126,10 +126,7 @@ async def leavevc(_, message):
     )
  
          #---------------------#
- @app.on_message(
-    filters.regex("joinvc")
-    & (filters.user(SUDOERS))
-    & ~filters.private
+@app.on_message(filters.regex("joinvc") & (filters.user(SUDOERS)) & ~filters.private
 )
 async def joinvc(_, message):
     global call
