@@ -423,11 +423,11 @@ async def ytplay(requested_by, query, message):
         wordfilter = Wordfilter()
         wordfilter.addWords(['yamete', 'kudasai', 'arigato', 'hentai'])     
         if wordfilter.blacklisted(songname): 
-           await m.edit("__**Not allowed song !!!**__")  
+           await m.edit(f"__**Not allowed song !!!**__{songname}")  
            playing = False
            return
         if detecting == "ko":
-           await m.edit("__**Not allowed Language !!!**__")  
+           await m.edit(f"__**Not allowed Language !!!**__ {songname}")  
            playing = False
            return
          
