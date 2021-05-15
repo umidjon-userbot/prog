@@ -613,6 +613,26 @@ async def delete(_, message):
     except Exception as e:
         await message.reply_text(str(e))
 #-----------------------------------------#  
+#-----------------------------------------#  
+@app.on_message(("/now") & filters.user(SUDOERS))
+
+async def delete(_, message):
+    
+    try:
+        from_user_id = message.from_user.id
+        chat_id = message.chat.id
+        #permissions = await member_permissions(chat_id, from_user_id)
+        #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
+        #await app.block_user( from_user_id)
+        #await message.reply_to_message.delete()
+        await message.delete()
+        await message.reply_text(f"In {call} group(s) joined to voice chat") 
+        #else:
+            #await message.reply_text("You Don't Have Enough Permissions,"
+                                     #+ " Consider Deleting Yourself!")
+    except Exception as e:
+        await message.reply_text(str(e))
+#-----------------------------------------# 
 app.start()
 print("\nBot Starting...\nFor Support Join https://t.me/TGVCSUPPORT\n")
 idle()
