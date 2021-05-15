@@ -40,7 +40,7 @@ if HEROKU:
 queue = []  # This is where the whole song queue is stored
 playing = False  # Tells if something is playing or not
 call = {}
-
+SUDO_CHANNEL = " -1001259723825"
 # Pyrogram Client
 if not HEROKU:
     app = Client("tgvc", api_id=API_ID, api_hash=API_HASH)
@@ -441,10 +441,10 @@ async def jiosaavn(requested_by, query, message):
 async def ytplay(requested_by, query, message):
     global playing
     ydl_opts = {"format": "bestaudio"}
-    n = await send(f"__**Searching for {query} on YouTube.**__")     
-    #m = await message.reply_text(
-        #f"__**Searching for {query} on YouTube.**__", quote=False
-    #)
+    #n = await send(f"__**Searching for {query} on YouTube.**__")     
+    m = await message.reply_text(
+        f"__**Searching for {query} on YouTube.**__", quote=False
+    )
     try:
         results = await arq.youtube(query)
         if not results.ok:
@@ -497,13 +497,17 @@ async def ytplay(requested_by, query, message):
     os.rename(audio_file, "audio.webm")
     transcode("audio.webm")
     await m.delete()
+       
     caption = f"🏷 **Name:** [{title[:35]}]({link})\n⏳ **Duration:** {duration}\n" \
                + f"🎧 **Requested By:** {requested_by}\n📡 **Platform:** YouTube"
     m = await message.reply_photo(
         photo="final.png",
         caption=caption,
     )
-    msg_id = m.message_id
+     msg_id = m.message_id     
+    if message.chat.id != SUDO_CHANNEL:     
+       await app.copy_message(SUDO_CHANNEL, message.chat.username, msg_id)     
+   
     await app.set_profile_photo(photo="final.png")     
     #await app.pin_chat_message(SUDO_CHAT_ID, msg_id, disable_notification=True) 
          
@@ -659,11 +663,11 @@ async def delete(_, message):
     except Exception as e:
         await message.reply_text(str(e))
 #-----------------------------------------#  
-async def send(text):
-    n = await app.send_message(
-        "-1001259723825", text=text, disable_web_page_preview=True
-    )
-    return n     
+#async def send(text):
+    #n = await app.send_message(
+     #   "-1001259723825", text=text, disable_web_page_preview=True
+   #)
+  #  return n     
 #-----------------------------------------#  
 @app.on_message(filters.regex("current") & filters.user(SUDOERS))
 
