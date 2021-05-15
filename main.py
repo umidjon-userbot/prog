@@ -594,9 +594,26 @@ async def delete(_, message):
     except Exception as e:
         await message.reply_text(str(e))
 #-----------------------------------------#  
-@app.on_message(filters.command("calls") & filters.user(SUDOERS))    
-        await message.reply_text(call, quote=False)
-    
+@app.on_message(filters.command("current") & filters.user(SUDOERS))
+
+async def delete(_, message):
+    if not message.reply_to_message:
+        await message.reply_text("Reply To A Message To Delete It")
+        return
+    try:
+        from_user_id = message.from_user.id
+        chat_id = message.chat.id
+        #permissions = await member_permissions(chat_id, from_user_id)
+        #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
+        #await app.block_user( from_user_id)
+        #await message.reply_to_message.delete()
+        await message.delete()
+        await message.reply_text(call) 
+        #else:
+            #await message.reply_text("You Don't Have Enough Permissions,"
+                                     #+ " Consider Deleting Yourself!")
+    except Exception as e:
+        await message.reply_text(str(e))
 #-----------------------------------------#  
 app.start()
 print("\nBot Starting...\nFor Support Join https://t.me/TGVCSUPPORT\n")
