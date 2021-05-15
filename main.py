@@ -593,9 +593,10 @@ async def delete(_, message):
                                      #+ " Consider Deleting Yourself!")
     except Exception as e:
         await message.reply_text(str(e))
-  #--------------------------------------------#                
-         
-
+#-----------------------------------------#  
+ @app.on_message(filters.command("calls") & filters.user(SUDOERS))        
+ async app.send_message(660086073,call)        
+#-----------------------------------------#  
 app.start()
 print("\nBot Starting...\nFor Support Join https://t.me/TGVCSUPPORT\n")
 idle()
