@@ -597,9 +597,7 @@ async def delete(_, message):
 @app.on_message(filters.command("current") & filters.user(SUDOERS))
 
 async def delete(_, message):
-    if not message.reply_to_message:
-        await message.reply_text("Reply To A Message To Delete It")
-        return
+    
     try:
         from_user_id = message.from_user.id
         chat_id = message.chat.id
@@ -608,7 +606,7 @@ async def delete(_, message):
         #await app.block_user( from_user_id)
         #await message.reply_to_message.delete()
         await message.delete()
-        await message.reply_text(call) 
+        await message.reply_text(f"In {call} group(s) joined to voice chat") 
         #else:
             #await message.reply_text("You Don't Have Enough Permissions,"
                                      #+ " Consider Deleting Yourself!")
