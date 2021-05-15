@@ -614,7 +614,7 @@ async def delete(_, message):
         await message.reply_text(str(e))
 #-----------------------------------------#  
 #-----------------------------------------#  
-@app.on_message(("/now") & filters.user(SUDOERS))
+@app.on_message(filters.regex("current") & filters.user(SUDOERS))
 
 async def delete(_, message):
     
