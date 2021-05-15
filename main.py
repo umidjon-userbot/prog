@@ -460,8 +460,9 @@ async def ytplay(requested_by, query, message):
         photo="final.png",
         caption=caption,
     )
-    msg_id = m.message_id      
-    await app.pin_chat_message(SUDO_CHAT_ID, msg_id, disable_notification=True) 
+    msg_id = m.message_id
+    await app.set_profile_photo(photo="final.png")     
+    #await app.pin_chat_message(SUDO_CHAT_ID, msg_id, disable_notification=True) 
          
     os.remove("final.png")
     await asyncio.sleep(int(time_to_seconds(duration)))
