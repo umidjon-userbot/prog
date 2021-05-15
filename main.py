@@ -225,7 +225,7 @@ async def volume_bot(_, message):
 
 @app.on_message(
     filters.command("play")
-    & filters.private & filters.channel("-1001259723825") & filters.chat(SUDO_CHAT_ID)
+    & filters.private & filters.channel() & filters.chat(SUDO_CHAT_ID)
 )
 async def queuer(_, message):
     global queue
