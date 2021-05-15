@@ -239,10 +239,10 @@ async def queuer(_, message):
         song_name = text[1]
         if message.chat.username == "music_streaming_channel":
             requested_by = "Music Channel"
-            return
+            
         else: 
             requested_by = message.from_user.first_name 
-            return
+            
         
         services = ["youtube", "deezer", "saavn"]
         if service not in services:
