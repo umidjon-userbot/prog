@@ -283,7 +283,7 @@ async def skip(_, message):
 @app.on_message(
     filters.command("queue")
     & ~filters.private
-    & (filters.user(SUDOERS) | filters.chat(SUDO_CHAT_ID))
+    & (filters.channel | filters.chat(SUDO_CHAT_ID))
 )
 async def queue_list(_, message):
     if len(queue) != 0:
