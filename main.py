@@ -6,6 +6,12 @@ import subprocess
 import traceback
 from sys import version as pyver
 
+
+from langdetect import detect
+from langdetect import detect_langs
+from langdetect import DetectorFactory
+from wordfilter import Wordfilter
+
 import youtube_dl
 from pyrogram import Client, filters, idle
 from pytgcalls import GroupCall
@@ -406,6 +412,26 @@ async def ytplay(requested_by, query, message):
         thumbnail = results[0].thumbnails[0]
         duration = results[0].duration
         views = results[0].views
+         
+         
+         
+         
+        songname = title.lower()
+        detecting = detect(songname)
+         
+        wordfilter = Wordfilter()
+        wordfilter.addWords(['yamete', 'kudasai', 'arigato', 'hentai'])     
+        if wordfilter.blacklisted(songname): 
+           await m.edit("__**Not allowed song !!!**__")  
+           playing = False
+           return
+        if detecting == "ko":
+           await m.edit("__**Not allowed Language !!!**__")  
+           playing = False
+           return
+         
+         
+         
         if time_to_seconds(duration) >= 1800:
             await m.edit("__**Bruh! Only songs within 30 Mins.**__")
             playing = False
@@ -416,6 +442,7 @@ async def ytplay(requested_by, query, message):
         print(str(e))
         return
     await m.edit("__**Processing Thumbnail.**__")
+    await app.update_profile(first_name=f"🔉{title[:35]} ",bio = f"__{title[:35]}__ ijro etilmoqda")     
     await generate_cover(requested_by, title, views, duration, thumbnail)
     await m.edit("__**Downloading Music.**__")
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -426,16 +453,18 @@ async def ytplay(requested_by, query, message):
     os.rename(audio_file, "audio.webm")
     transcode("audio.webm")
     await m.delete()
-    caption = (
-        f"🏷 **Name:** [{title[:35]}]({link})\n⏳ **Duration:** {duration}\n"
-        + f"🎧 **Requested By:** {message.from_user.mention}\n📡 **Platform:** YouTube"
-    )
+    caption = f"🏷 **Name:** [{title[:35]}]({link})\n⏳ **Duration:** {duration}\n" \
+               + f"🎧 **Requested By:** {requested_by}\n📡 **Platform:** YouTube"
     m = await message.reply_photo(
         photo="final.png",
         caption=caption,
     )
+    msg_id = m.message_id      
+    await app.pin_chat_message(SUDO_CHAT_ID, msg_id, disable_notification=True) 
+         
     os.remove("final.png")
     await asyncio.sleep(int(time_to_seconds(duration)))
+    await app.delete_profile_photos([p.file_id for p in photos[1:]])     
     playing = False
     await m.delete()
 
@@ -444,7 +473,7 @@ async def ytplay(requested_by, query, message):
 
 
 @app.on_message(
-    filters.command("telegram") & filters.chat(SUDO_CHAT_ID) & ~filters.edited
+    filters.command("telegram") & filters.user(SUDOERS) & ~filters.edited
 )
 async def tgplay(_, message):
     global playing
@@ -466,6 +495,7 @@ async def tgplay(_, message):
             playing = False
             return
         duration = message.reply_to_message.audio.duration
+         
         if not duration:
             await message.reply_text(
                 "__**Only Songs With Duration Are Supported.**__", quote=False
@@ -473,6 +503,8 @@ async def tgplay(_, message):
             return
         m = await message.reply_text("__**Downloading.**__", quote=False)
         song = await message.reply_to_message.download()
+        song_name = message.reply_to_message.audio.title 
+        await app.update_profile(first_name=f"🔉{song_name[:35]} ",bio = f"__{song_name[:35]}__ ijro etilmoqda") 
         await m.edit("__**Transcoding.**__")
         transcode(song)
         await m.edit(f"**Playing** __**{message.reply_to_message.link}.**__")
@@ -482,7 +514,85 @@ async def tgplay(_, message):
     await message.reply_text(
         "__**Only Audio Files (Not Document) Are Supported.**__", quote=False
     )
+#----------------------------------------#
+     # Delete messages
 
+
+@app.on_message(filters.command("d") & filters.user(SUDOERS))
+
+async def delete(_, message):
+    if not message.reply_to_message:
+        await message.reply_text("Reply To A Message To Delete It")
+        return
+    try:
+        from_user_id = message.from_user.id
+        chat_id = message.chat.id
+        #permissions = await member_permissions(chat_id, from_user_id)
+        #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
+        await message.reply_to_message.delete()
+        await message.delete()
+        #else:
+            #await message.reply_text("You Don't Have Enough Permissions,"
+                                     #+ " Consider Deleting Yourself!")
+    except Exception as e:
+        await message.reply_text(str(e))
+  #--------------------------------------------#
+@app.on_message(filters.command("cats") & ~filters.edited)
+#@capture_err
+async def cat(_, message):
+    with urllib.request.urlopen(
+            "https://api.thecatapi.com/v1/images/search"
+    ) as url:
+        data = json.loads(url.read().decode())
+    cat_url = (data[0]['url'])
+    await message.reply_photo(cat_url)
+         
+         
+         
+         
+         #---------------#
+@app.on_message(filters.command("block") & filters.user(SUDOERS))
+
+async def delete(_, message):
+    if not message.reply_to_message:
+        await message.reply_text("Reply To A Message To Delete It")
+        return
+    try:
+        from_user_id = message.from_user.id
+        chat_id = message.chat.id
+        #permissions = await member_permissions(chat_id, from_user_id)
+        #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
+        await app.block_user( from_user_id)
+        #await message.reply_to_message.delete()
+        await message.delete()
+        #else:
+            #await message.reply_text("You Don't Have Enough Permissions,"
+                                     #+ " Consider Deleting Yourself!")
+    except Exception as e:
+        await message.reply_text(str(e))
+  #--------------------------------------------#       
+         #---------------#
+@app.on_message(filters.command("unblock") & filters.user(SUDOERS))
+
+async def delete(_, message):
+    if not message.reply_to_message:
+        await message.reply_text("Reply To A Message To Delete It")
+        return
+    try:
+        from_user_id = message.from_user.id
+        chat_id = message.chat.id
+        #permissions = await member_permissions(chat_id, from_user_id)
+        #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
+        await app.unblock_user( from_user_id)
+        #await message.reply_to_message.delete()
+        await message.delete()
+        #else:
+            #await message.reply_text("You Don't Have Enough Permissions,"
+                                     #+ " Consider Deleting Yourself!")
+    except Exception as e:
+        await message.reply_text(str(e))
+  #--------------------------------------------#                
+         
 
 app.start()
 print("\nBot Starting...\nFor Support Join https://t.me/TGVCSUPPORT\n")
