@@ -444,7 +444,7 @@ async def ytplay(requested_by, query, message):
     n = await send(f"__**Searching for {query} on YouTube.**__")     
     #m = await message.reply_text(
         #f"__**Searching for {query} on YouTube.**__", quote=False
-    )
+    #)
     try:
         results = await arq.youtube(query)
         if not results.ok:
