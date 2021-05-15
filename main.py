@@ -88,7 +88,7 @@ async def repo(_, message):
 
 @app.on_message(
     filters.command("joinvc")
-    & (filters.user(SUDOERS) | filters.chat(SUDO_CHAT_ID))
+    & (filters.user(SUDOERS))
     & ~filters.private
 )
 async def joinvc(_, message):
