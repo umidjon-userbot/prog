@@ -237,6 +237,8 @@ async def queuer(_, message):
         text = message.text.split(None, 2)[1:]
         service = text[0].lower()
         song_name = text[1]
+        if message.from_user.first_name == 0:
+         message.from_user.first_name = "channel"
         requested_by = message.from_user.first_name
         services = ["youtube", "deezer", "saavn"]
         if service not in services:
