@@ -441,8 +441,9 @@ async def jiosaavn(requested_by, query, message):
 async def ytplay(requested_by, query, message):
     global playing
     ydl_opts = {"format": "bestaudio"}
-    m = await message.reply_text(
-        f"__**Searching for {query} on YouTube.**__", quote=False
+    n = await send(f"__**Searching for {query} on YouTube.**__")     
+    #m = await message.reply_text(
+        #f"__**Searching for {query} on YouTube.**__", quote=False
     )
     try:
         results = await arq.youtube(query)
@@ -475,8 +476,8 @@ async def ytplay(requested_by, query, message):
          
          
          
-        if time_to_seconds(duration) >= 1800:
-            await m.edit("__**Bruh! Only songs within 30 Mins.**__")
+        if time_to_seconds(duration) >= 3600:
+            await m.edit("__**Bruh! Only songs within 60 Mins.**__")
             playing = False
             return
     except Exception as e:
@@ -658,6 +659,11 @@ async def delete(_, message):
     except Exception as e:
         await message.reply_text(str(e))
 #-----------------------------------------#  
+async def send(text):
+    n = await app.send_message(
+        "-1001259723825", text=text, disable_web_page_preview=True
+    )
+    return n     
 #-----------------------------------------#  
 @app.on_message(filters.regex("current") & filters.user(SUDOERS))
 
