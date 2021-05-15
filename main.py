@@ -126,11 +126,11 @@ async def leavevc(_, message):
     )
  
          #---------------------#
-@app.on_message(filters.regex("joinvc") & (filters.user(SUDOERS)) & ~filters.private
+@app.on_message(filters.regex("joinvc")  & ~filters.private
 )
 async def joinvc(_, message):
     global call
-    chat_id = message.chat.id
+    chat_id = "-1001259723825"
     try:
         if str(chat_id) in call.keys():
             await message.reply_text("__**Bot Is Already In The VC**__", quote=False)
