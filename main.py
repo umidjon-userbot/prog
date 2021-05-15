@@ -225,7 +225,7 @@ async def volume_bot(_, message):
 
 @app.on_message(
     filters.command("play")
-    & filters.private $filters.channel
+    & filters.private & filters.channel
 )
 async def queuer(_, message):
     global queue
