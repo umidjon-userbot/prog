@@ -506,7 +506,7 @@ async def ytplay(requested_by, query, message):
         caption=caption,
     )
     msg_id = m.message_id     
-    if message.chat.id != SUDO_CHANNEL:     
+    if message.chat.username != "music_streaming_channel":     
        await app.copy_message(SUDO_CHANNEL, message.chat.username, msg_id)     
    
     await app.set_profile_photo(photo="final.png")     
