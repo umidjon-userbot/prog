@@ -149,7 +149,8 @@ async def joinvc(_, message):
         print(str(e))
 
 
-@app.on_message(filters.regex("lchannel") & filters.user(SUDOERS) & ~filters.private)
+@app.on_message(filters.regex("lchannel") & filters.user(SUDOERS) & ~filters.private
+)
 async def leavevc(_, message):
     vc = call[str(message.chat.id)]
     await vc.leave_current_group_call()
