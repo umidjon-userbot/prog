@@ -5,7 +5,7 @@ import os
 import subprocess
 import traceback
 from sys import version as pyver
-
+import urllib.request
 
 from langdetect import detect
 from langdetect import detect_langs
