@@ -503,9 +503,12 @@ async def ytplay(requested_by, query, message):
          
     os.remove("final.png")
     await asyncio.sleep(int(time_to_seconds(duration)))
+    await m.delete()
+     
+    photos = await app.get_profile_photos("me")     
     await app.delete_profile_photos([p.file_id for p in photos[1:]])     
     playing = False
-    await m.delete()
+    #await m.delete()
 
 
 # Telegram Audio------------------------------------
