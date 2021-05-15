@@ -237,7 +237,7 @@ async def queuer(_, message):
         text = message.text.split(None, 2)[1:]
         service = text[0].lower()
         song_name = text[1]
-        if message.chat.id == "-1001259723825":
+        if message.chat.username == "music_streaming_channel":
             requested_by = "Music Channel"
             return
         else: 
