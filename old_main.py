@@ -296,14 +296,14 @@ async def queue_list(_, message):
             )
             i += 1
         m = await message.reply_text(text, quote=False)
-        await delete(message)
+        await delete(message.message.id)
         await m.delete()
 
     else:
         m = await message.reply_text(
             "__**Queue Is Empty, Just Like Your Life.**__", quote=False
         )
-        await delete(message)
+        await delete(message.message.id)
         await m.delete()
 
 
@@ -507,7 +507,7 @@ async def ytplay(requested_by, query, message):
     )
     msg_id = m.message_id     
     if message.chat.username != "music_streaming_channel":     
-       await app.copy_message(SUDO_CHANNEL, message.chat.username, msg_id)     
+       copy = await app.copy_message(SUDO_CHANNEL, message.chat.username, msg_id)     
    
     await app.set_profile_photo(photo="final.png")     
     #await app.pin_chat_message(SUDO_CHAT_ID, msg_id, disable_notification=True) 
@@ -515,6 +515,7 @@ async def ytplay(requested_by, query, message):
     os.remove("final.png")
     await asyncio.sleep(int(time_to_seconds(duration)))
     await m.delete()
+    await copy.delete()     
      
     photos = await app.get_profile_photos("me")     
     await app.delete_profile_photos([p.file_id for p in photos[1:]])     
