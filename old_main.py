@@ -608,11 +608,11 @@ async def cat(_, message):
 @app.on_message(filters.command("block") & filters.user(SUDOERS))
 
 async def delete(_, message):
-    if not message.reply_to_message:
+    if not message.from_user.id:
         await message.reply_text("Reply To A Message To Delete It")
         return
     try:
-        from_user_id = message.from_user.id
+        from_user_id = message.reply_to_message.from_user.id
         chat_id = message.chat.id
         #permissions = await member_permissions(chat_id, from_user_id)
         #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
@@ -633,7 +633,7 @@ async def delete(_, message):
         await message.reply_text("Reply To A Message To Delete It")
         return
     try:
-        from_user_id = message.from_user.id
+        from_user_id = message.reply_to_message.from_user.id
         chat_id = message.chat.id
         #permissions = await member_permissions(chat_id, from_user_id)
         #if "can_delete_messages" in permissions or from_user_id in SUDOERS:
