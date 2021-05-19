@@ -728,7 +728,7 @@ def isArgInt(message: Message) -> bool:
         return [False, 0]
 
 
-@app.on_message(filters.command("q"))
+@app.on_message(filters.command("q") & filters.user(SUDOERS))
 #@capture_err
 async def quotly_func(_, message: Message):
     if not message.reply_to_message:
