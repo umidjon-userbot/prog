@@ -135,7 +135,7 @@ async def leavevc(_, message):
     )
     os.execvp(
         f"python{str(pyver.split(' ')[0])[:3]}",
-        [f"python{str(pyver.split(' ')[0])[:3]}", "main.py"],
+        [f"python{str(pyver.split(' ')[0])[:3]}", "old_main.py"],
     )
  
          #---------------------#
