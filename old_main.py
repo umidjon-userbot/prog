@@ -10,9 +10,10 @@ from io import BytesIO
 from pyrogram import filters
 from pyrogram.types import Message
 
-from wbb import arq
-from wbb.core.decorators.errors import capture_err
+#$from wbb.core.decorators.errors import capture_err
 
+telegraph = Telegraph()
+telegraph.create_account(short_name="wbb")
 
 import subprocess
 import traceback
@@ -728,7 +729,7 @@ def isArgInt(message: Message) -> bool:
 
 
 @app.on_message(filters.command("q"))
-@capture_err
+#@capture_err
 async def quotly_func(_, message: Message):
     if not message.reply_to_message:
         await message.reply_text("Reply to a message to quote it.")
