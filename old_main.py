@@ -146,7 +146,7 @@ async def joinvc(_, message):
     chat_id = "-1001259723825"
     try:
         if str(chat_id) in call.keys():
-            await message.reply_text("__**Bot Is Already In The VC**__", quote=False)
+            await message.reply_text("__**Bot Is Already In The Channel VC**__", quote=False)
             return
         vc = GroupCall(
             client=app,
@@ -156,7 +156,7 @@ async def joinvc(_, message):
         )
         await vc.start(chat_id)
         call[str(chat_id)] = vc
-        await message.reply_text("__**Joined The Voice Chat.**__", quote=False)
+        await message.reply_text("__**Joined The Channel Voice Chat.**__", quote=False)
     except Exception as e:
         e = traceback.format_exc
         print(str(e))
@@ -169,7 +169,7 @@ async def leavevc(_, message):
     await vc.leave_current_group_call()
     await vc.stop()
     await message.reply_text(
-        "__**Left The Voice Chat, Restarting Client....**__", quote=False
+        "__**Left The Channel Voice Chat, Restarting Client....**__", quote=False
     )
     os.execvp(
         f"python{str(pyver.split(' ')[0])[:3]}",
@@ -728,7 +728,7 @@ def isArgInt(message: Message) -> bool:
         return [False, 0]
 
 
-@app.on_message(filters.command("q") & filters.user(SUDOERS))
+@app.on_message(filters.command("quot"))
 #@capture_err
 async def quotly_func(_, message: Message):
     if not message.reply_to_message:
