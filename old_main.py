@@ -12,8 +12,8 @@ from pyrogram.types import Message
 
 #$from wbb.core.decorators.errors import capture_err
 
-telegraph = Telegraph()
-telegraph.create_account(short_name="wbb")
+#telegraph = Telegraph()
+#telegraph.create_account(short_name="wbb")
 
 import subprocess
 import traceback
