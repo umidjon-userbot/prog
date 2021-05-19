@@ -130,6 +130,11 @@ async def leavevc(_, message):
     vc = call[str(message.chat.id)]
     await vc.leave_current_group_call()
     await vc.stop()
+    
+    
+    vcc = SUDO_CHANNEL
+    await vcc.leave_current_group_call()
+    await vcc.stop()
     await message.reply_text(
         "__**Left The Voice Chat, Restarting Client....**__", quote=False
     )
