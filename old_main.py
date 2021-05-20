@@ -801,6 +801,17 @@ async def quotly_func(_, message: Message):
         )
         await m.delete()
         return         
+      #--------------------------------------------------------------------------#
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      #---------------------------------------------------------------------------------------#
 app.start()
 print("\nBot Starting...\nFor Support Join https://t.me/TGVCSUPPORT\n")
 idle()
