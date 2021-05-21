@@ -517,7 +517,7 @@ async def ytplay(requested_by, query, message):
     transcode("audio.webm")
     await m.delete()
        
-    caption = f"🏷 **Name:** [{title[:35]}]({link})\n⏳ **Duration:** {duration}\n" \
+    caption = f"🏷 **Name:** [{title}]({link})\n⏳ **Duration:** {duration}\n" \
                + f"🎧 **Requested By:** {requested_by}\n📡 **Platform:** YouTube"
     m = await message.reply_photo(
         photo="final.png",
