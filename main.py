@@ -26,6 +26,18 @@ from langdetect import detect_langs
 from langdetect import DetectorFactory
 from wordfilter import Wordfilter
 
+import imghdr
+import traceback import format_exc
+from pyrogram.errors.exceptions.bad_request_400 import (PeerIdInvalid,
+                                                        ShortnameOccupyFailed,
+                                                        StickerPngDimensions,
+                                                        StickerPngNopng,
+                                                        UserIsBlocked)
+from wbb.utils.files import (get_document_from_file_id,
+                             resize_file_to_sticker_size, upload_document)
+from wbb.utils.stickerset import (add_sticker_to_set, create_sticker,
+                                  create_sticker_set, get_sticker_set_by_name)
+
 import youtube_dl
 from pyrogram import Client, filters, idle
 from pytgcalls import GroupCall
@@ -825,7 +837,137 @@ async def take_ss(_, message):
         await message.reply_text(str(e))      
       
       
-      
+      #---------------------------------------------------------------------------------------#
+MAX_STICKERS = (
+    120  # would be better if we could fetch this limit directly from telegram
+)
+SUPPORTED_TYPES = ["jpeg", "png", "webp"]
+
+
+@app.on_message(filters.command("sticker_id") & ~filters.edited)
+#@capture_err
+async def sticker_id(_, message):
+    if not message.reply_to_message:
+        return await message.reply_text("Reply to a sticker.")
+    if not message.reply_to_message.sticker:
+        return await message.reply_text("Reply to a sticker.")
+    file_id = message.reply_to_message.sticker.file_id
+    await message.reply_text(f"`{file_id}`")
+
+
+@app.on_message(filters.command("stik") & ~filters.edited)
+@capture_err
+async def kang(client, message):
+    if not message.reply_to_message:
+        return await message.reply_text("Reply to a sticker/image to kang it.")
+    if not message.from_user:
+        return await message.reply_text("You are anon admin, kang stickers in my pm.")
+    msg = await message.reply_text("Kanging Sticker..")
+
+    # Find the proper emoji
+    args = message.text.split()
+    if len(args) > 1:
+        sticker_emoji = str(args[1])
+    elif (
+        message.reply_to_message.sticker
+        and message.reply_to_message.sticker.emoji
+    ):
+        sticker_emoji = message.reply_to_message.sticker.emoji
+    else:
+        sticker_emoji = "🤔"
+
+    # Get the corresponding fileid, resize the file if necessary
+    doc = message.reply_to_message.photo or message.reply_to_message.document
+    try:
+        if message.reply_to_message.sticker:
+            sticker = await create_sticker(
+                await get_document_from_file_id(
+                    message.reply_to_message.sticker.file_id
+                ),
+                sticker_emoji,
+            )
+        elif doc:
+            temp_file_path = await app.download_media(doc)
+            image_type = imghdr.what(temp_file_path)
+            if image_type not in SUPPORTED_TYPES:
+                return await msg.edit(
+                    "Format not supported! ({})".format(image_type)
+                )
+            try:
+                temp_file_path = await resize_file_to_sticker_size(
+                    temp_file_path
+                )
+            except OSError as e:
+                await msg.edit_text("Something wrong happened.")
+                raise Exception(
+                    f"Something went wrong while resizing the sticker (at {temp_file_path}); {e}"
+                )
+                return False
+            sticker = await create_sticker(
+                await upload_document(client, temp_file_path, message.chat.id),
+                sticker_emoji,
+            )
+            if os.path.isfile(temp_file_path):
+                os.remove(temp_file_path)
+        else:
+            return await msg.edit("Nope, can't kang that.")
+    except ShortnameOccupyFailed:
+        await message.reply_text("Change Your Name Or Username")
+        return
+
+    except Exception as e:
+        await message.reply_text(str(e))
+        e = format_exc()
+        return print(e)
+
+    # Find an available pack & add the sticker to the pack; create a new pack if needed
+    # Would be a good idea to cache the number instead of searching it every single time...
+    packnum = 0
+    packname = "f" + str(message.from_user.id) + "_by_" + BOT_USERNAME
+    try:
+        while True:
+            stickerset = await get_sticker_set_by_name(client, packname)
+            if not stickerset:
+                stickerset = await create_sticker_set(
+                    client,
+                    message.from_user.id,
+                    f"{message.from_user.first_name[:32]}'s kang pack",
+                    packname,
+                    [sticker],
+                )
+            elif stickerset.set.count >= MAX_STICKERS:
+                packnum += 1
+                packname = (
+                    "f"
+                    + str(packnum)
+                    + "_"
+                    + str(message.from_user.id)
+                    + "_by_"
+                    + BOT_USERNAME
+                )
+                continue
+            else:
+                await add_sticker_to_set(client, stickerset, sticker)
+            break
+
+        await msg.edit(
+            "Sticker Kanged To [Pack](t.me/addstickers/{})\nEmoji: {}".format(
+                packname, sticker_emoji
+            )
+        )
+    #except (PeerIdInvalid, UserIsBlocked):
+       # keyboard = InlineKeyboardMarkup(
+           # [[InlineKeyboardButton(text="Start", url=f"t.me/{BOT_USERNAME}")]]
+        #)
+        #await msg.edit(
+           # "You Need To Start A Private Chat With Me.", reply_markup=keyboard
+        )
+    except StickerPngNopng:
+        await message.reply_text(
+            "Stickers must be png files but the provided image was not a png"
+        )
+    except StickerPngDimensions:
+        await message.reply_text("The sticker png dimensions are invalid.")         
       
       
       
