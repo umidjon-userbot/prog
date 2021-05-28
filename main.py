@@ -10,6 +10,22 @@ from io import BytesIO
 from pyrogram import filters
 from pyrogram.types import Message
 
+
+
+import db
+db.init()
+
+from pyrogram import filters, idle
+from pyrogram.errors.exceptions.bad_request_400 import ChatAdminRequired
+from pyrogram.raw.functions.phone import CreateGroupCall
+from pyrogram.raw.types import InputPeerChannel
+from pyrogram.types import Message
+from pytgcalls import GroupCall
+
+from db import db
+from functions import (change_theme, deezer, get_theme, saavn, themes,
+                       transcode, youtube, app)
+
 #$from wbb.core.decorators.errors import capture_err
 
 #telegraph = Telegraph()
@@ -43,9 +59,9 @@ from pyrogram import Client, filters, idle
 from pytgcalls import GroupCall
 from Python_ARQ import ARQ
 
-from functions import (convert_seconds, download_and_transcode_song,
-                       generate_cover, generate_cover_square, time_to_seconds,
-                       transcode)
+#from functions import (convert_seconds, download_and_transcode_song,
+ #                      generate_cover, generate_cover_square, time_to_seconds,
+ #                      transcode)
 from misc import HELP_TEXT, REPO_TEXT, START_TEXT
 
 # TODO Make it look less messed up
