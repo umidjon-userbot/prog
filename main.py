@@ -961,7 +961,7 @@ async def kang(client, message):
         #)
         #await msg.edit(
            # "You Need To Start A Private Chat With Me.", reply_markup=keyboard
-        )
+        #)
     except StickerPngNopng:
         await message.reply_text(
             "Stickers must be png files but the provided image was not a png"
