@@ -28,11 +28,11 @@ from wordfilter import Wordfilter
 
 import imghdr
 from traceback import format_exc
-from pyrogram.errors.exceptions.bad_request_400 import (PeerIdInvalid,
-                                                        ShortnameOccupyFailed,
-                                                        StickerPngDimensions,
-                                                        StickerPngNopng,
-                                                        UserIsBlocked)
+#from pyrogram.errors.exceptions.bad_request_400 import (PeerIdInvalid,
+##                                                        ShortnameOccupyFailed,
+#                                                        StickerPngDimensions,
+# #                                                       StickerPngNopng,
+#                                                        UserIsBlocked)
 from wbb.utils.files import (get_document_from_file_id,
                              resize_file_to_sticker_size, upload_document)
 from wbb.utils.stickerset import (add_sticker_to_set, create_sticker,
