@@ -34,9 +34,9 @@ from traceback import format_exc
 # #                                                       StickerPngNopng,
 #                                                        UserIsBlocked)
 #from wbb.utils.files import (get_document_from_file_id,
-                             resize_file_to_sticker_size, upload_document)
+                          #  @ resize_file_to_sticker_size, upload_document)
 #from wbb.utils.stickerset import (add_sticker_to_set, create_sticker,
-                                  create_sticker_set, get_sticker_set_by_name)
+                              #    create_sticker_set, get_sticker_set_by_name)
 
 import youtube_dl
 from pyrogram import Client, filters, idle
