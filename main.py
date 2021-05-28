@@ -27,7 +27,7 @@ from langdetect import DetectorFactory
 from wordfilter import Wordfilter
 
 import imghdr
-import traceback import format_exc
+from traceback import format_exc
 from pyrogram.errors.exceptions.bad_request_400 import (PeerIdInvalid,
                                                         ShortnameOccupyFailed,
                                                         StickerPngDimensions,
